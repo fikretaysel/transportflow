@@ -71,6 +71,16 @@ Focus areas:
 > “The goal was to simulate a real-world logistics flow in a simple but structured way.”
 
 ---
+## Architecture Concepts
+
+- Workflow-based order lifecycle
+- State transitions
+- Event-driven order history
+- Delayed order risk detection
+- Operational dashboard visibility
+- Separation of business logic from UI complexity
+  
+---
 
 ## 🛠 Tech Stack
 
@@ -132,6 +142,16 @@ php artisan serve
 
 ---
 
+## Future Improvements
+
+- Queue-based background processing
+- REST API endpoints
+- Docker support
+- Role and permission management
+- Webhook integration for external logistics systems
+- Automated tests for order workflow transitions
+
+---  
 ##  Notes
 
 * This is a demo project, not production-ready
