@@ -25,6 +25,11 @@ class Order extends Model
         'completed_at',
     ];
 
+    protected $casts = [
+        'scheduled_at' => 'datetime',
+        'completed_at' => 'datetime',
+    ];
+
     public function driver()
     {
         return $this->belongsTo(Driver::class, 'assigned_driver_id');
@@ -38,6 +43,31 @@ class Order extends Model
     public function events()
     {
         return $this->hasMany(OrderEvent::class);
+    }
+
+    public function isDelayed(): bool
+    {
+        return
+            $this->scheduled_at &&
+            $this->scheduled_at->isPast() &&
+            $this->status !== 'completed';
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', '!=', 'completed');
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
+    }
+
+    public function scopeDelayed($query)
+    {
+        return $query->where('status', '!=', 'completed')
+            ->whereNotNull('scheduled_at')
+            ->where('scheduled_at', '<', now());
     }
 
 }

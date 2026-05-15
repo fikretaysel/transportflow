@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Driver;
 use Illuminate\Http\Request;
+use App\Services\OrderWorkflowService;
 
 class OrderController extends Controller
 {
@@ -13,17 +14,15 @@ class OrderController extends Controller
         $query = Order::with('driver')->latest();
 
         if ($request->filter === 'active') {
-            $query->whereNotIn('status', ['completed', 'cancelled']);
+            $query->active();
         }
 
         if ($request->filter === 'completed') {
-            $query->where('status', 'completed');
+            $query->completed();
         }
 
         if ($request->filter === 'delayed') {
-            $query->whereNotIn('status', ['completed', 'cancelled'])
-                ->whereNotNull('scheduled_at')
-                ->where('scheduled_at', '<', now());
+            $query->delayed();
         }
 
         $orders = $query->paginate(10);
@@ -70,11 +69,16 @@ class OrderController extends Controller
             ->with('success', 'Order created successfully.');
     }
 
-    public function show(Order $order)
+    public function show(Order $order, OrderWorkflowService $workflow)
     {
         $order->load('driver', 'creator');
 
-        return view('orders.show', compact('order'));
+        $nextStatuses = $workflow->getNextStatuses($order->status);
+
+        return view('orders.show', compact(
+            'order',
+            'nextStatuses'
+        ));
     }
 
     public function edit(Order $order)
@@ -118,20 +122,33 @@ class OrderController extends Controller
             ->with('success', 'Order deleted successfully.');
     }
 
-    public function updateStatus(Request $request, Order $order)
-    {
+    public function updateStatus(
+        Request $request,
+        Order $order,
+        OrderWorkflowService $workflow
+    ) {
         $validated = $request->validate([
             'status' => ['required', 'in:new,assigned,on_the_way,picked_up,delivered,completed'],
             'note' => ['nullable', 'string'],
         ]);
 
+        if (! $workflow->canTransition($order->status, $validated['status'])) {
+            return back()->withErrors([
+                'status' => 'Invalid status transition.'
+            ]);
+        }
+
+        $oldStatus = $order->status;
+
         $order->update([
             'status' => $validated['status'],
+            'completed_at' => $validated['status'] === 'completed' ? now() : $order->completed_at,
         ]);
 
         $order->events()->create([
-            'event_type' => $validated['status'],
-            'note' => $validated['note'] ?? 'Status updated',
+            'event_type' => 'status_changed',
+            'note' => $validated['note']
+                ?: "Status changed from {$oldStatus} to {$validated['status']}",
             'created_by' => auth()->id(),
         ]);
 

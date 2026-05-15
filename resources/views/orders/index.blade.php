@@ -63,10 +63,11 @@
 
                             <td class="px-4 py-3">
                                 {{ str_replace('_', ' ', ucfirst($order->status)) }}
-                                @if($order->scheduled_at && now()->gt($order->scheduled_at) && !in_array($order->status, ['completed', 'cancelled']))
-                                    <div class="text-red-600 text-sm font-bold">
+
+                                @if($order->isDelayed())
+                                    <span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded">
                                         Delayed
-                                    </div>
+                                    </span>
                                 @endif
                             </td>
 
