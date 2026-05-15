@@ -22,6 +22,8 @@ The goal of this project is to demonstrate backend design, workflow modeling, an
 * Assign drivers
 * Track full lifecycle of an order
 
+![Delayed Order](docs/screenshots/orders.png)
+
 ###  Status Workflow
 
 Orders follow a structured lifecycle:
@@ -40,6 +42,8 @@ new → assigned → on_the_way → picked_up → delivered → completed
   * Driver assigned
   * Status updated
 
+![Timeline](docs/screenshots/timeline.png)
+
 ### ⚠ Risk Detection (Delayed Orders)
 
 * Orders with past `scheduled_at` and not completed are flagged
@@ -55,6 +59,7 @@ new → assigned → on_the_way → picked_up → delivered → completed
 * Available Drivers
 * Quick navigation to filtered lists
 
+![Dashboard](docs/screenshots/dashboard.png)
 ---
 
 ##  Design Approach

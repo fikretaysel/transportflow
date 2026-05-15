@@ -65,7 +65,7 @@
                                 {{ str_replace('_', ' ', ucfirst($order->status)) }}
 
                                 @if($order->isDelayed())
-                                    <span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded">
+                                    <span style="background:#fee2e2; color:#b91c1c; padding:4px 8px; border-radius:6px;font-size:10px">
                                         Delayed
                                     </span>
                                 @endif
