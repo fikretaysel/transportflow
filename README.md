@@ -136,6 +136,13 @@ php artisan serve
 
 ---
 
+## Demo Login
+
+```
+Email: demo@transportflow.test  
+Password: password
+```
+
 ##  Demo Flow
 
 1. Create a driver
@@ -168,7 +175,7 @@ php artisan serve
 ---  
 ##  Notes
 
-* This is a demo project, not production-ready
+* This project focuses on backend workflow architecture and operational process modeling.
 * Focus is on backend logic and system design
 * UI is intentionally kept simple
 
