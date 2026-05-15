@@ -141,7 +141,16 @@ php artisan serve
 6. Check dashboard for delayed orders
 
 ---
+## Recent Improvements
 
+- Added workflow transition validation
+- Implemented controlled order state transitions
+- Improved event timeline UI
+- Added delayed order detection logic
+- Added query scopes for active, completed and delayed orders
+- Improved operational visibility for transport workflows
+
+---
 ## Future Improvements
 
 - Queue-based background processing
