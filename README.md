@@ -163,6 +163,24 @@ Password: password
 - Improved operational visibility for transport workflows
 
 ---
+
+## Testing
+
+The project includes:
+
+- Unit tests for workflow validation
+- Feature tests for authenticated order management
+- Database assertions for order creation and event tracking
+
+Run tests with:
+
+```
+php artisan test --filter=OrderWorkflowServiceTest
+
+php artisan test --filter=OrderFeatureTest
+
+```
+---
 ## Future Improvements
 
 - Queue-based background processing
